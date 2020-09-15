@@ -7,7 +7,11 @@
                 </v-card-title>
 
                 <v-card-subtitle class="pt-3 pb-0 mb-2 text-h6 text-center blue-grey--text">
-                    Just Another todos List App 
+                    <span class="title-color">J</span>ust 
+                    <span class="title-color">A</span>nother 
+                    <span class="title-color">T</span>odos 
+                    <span class="title-color">L</span>ist 
+                    <span class="title-color">A</span>pp 
                 </v-card-subtitle>
 
                 <v-card-text class="pb-0">
@@ -75,10 +79,8 @@
 
                                 <!-- text-field per editare il task -->
                                 <v-text-field v-else
-                                    id="text-edit"
                                     class="pl-3"
                                     ref="textEdit"
-                                    height="30"
                                     dense
                                     v-model="task.text"
                                     color="teal" background-color="teal lighten-5"
@@ -124,6 +126,7 @@
                         <v-icon>mdi-trash-can-outline</v-icon> All
                     </v-btn>
                 </v-card-actions>
+
             </v-card>
         </v-flex>
 
@@ -226,13 +229,8 @@ export default {
     },
 
     methods: {
-        focusOnEditField() {
-            // setto il focus sul v-text-field di input
-            this.$refs.textEdit.focus();
-        },
         editTask(taskToEditIndex) {
-            console.log("edit...");
-            // faccio apparire un v-text-field e faccio sparire lo span con il testo
+            // faccio apparire un v-text-field per l'edit e faccio sparire lo span con il testo
             this.taskToEditIndex = taskToEditIndex;
 
             // NOTA: qui ancora il v-text-field non è stato renderizzato, per cui per settare il focus devo aspettare
@@ -248,8 +246,7 @@ export default {
             });
         },
         updateTask() {
-            console.log("update...");
-            // faccio sparire il v-text-field e faccio riapparire lo span con il testo
+            // faccio sparire il v-text-field per l'edit e faccio riapparire lo span con il testo
             this.taskToEditIndex = null;
         },
         isClosing() {
@@ -261,10 +258,10 @@ export default {
                 // scrivo l'array in Local Storage
                 localStorage.setItem("jatlaTasks", JSON.stringify(this.tasks));
 
-                console.log(
-                    "jatlaTasks:",
-                    JSON.parse(localStorage.getItem("jatlaTasks"))
-                );
+                // console.log(
+                //     "jatlaTasks:",
+                //     JSON.parse(localStorage.getItem("jatlaTasks"))
+                // );
             }
         },
         getLocalStorage() {},
@@ -279,7 +276,7 @@ export default {
                         text: trimmedInput,
                     });
                 }
-                // resetto l'input
+                // resetto l'input (v-text-field)
                 this.task = null;
             }
         },

@@ -7,6 +7,10 @@
             max-width="45"
             contain
         ></v-img>
-        <span class="blue-grey--text">Jatla</span><br>
+        <span class="title-color">Jatla</span>
     </h1>
 </template>
+
+<style lang="scss" scoped>
+//
+</style>
