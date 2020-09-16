@@ -236,12 +236,16 @@ export default {
 
     methods: {
         editTask(taskToEditIndex) {
+            // DESCRIZIONE:
+            // visualizza un text-field per permetter all'utente di modificare l descrizione del task
+
             // faccio apparire un v-text-field per l'edit e faccio sparire lo span con il testo
             this.taskToEditIndex = taskToEditIndex;
 
             // NOTA: qui ancora il v-text-field non è stato renderizzato, per cui per settare il focus devo aspettare
             // che  l'elemento esista nel DOM, quindi uso la "nextTick()" che aspetta il prossimo aggiornamento del DOM
             this.$nextTick(() => {
+                // DESCRIZIONE:
                 // setto il focus sul v-text-field del task da editare
                 // console.log("this.$refs", this.$refs); // elenco degli elementi che hanno un attributo "ref" associato
                 // console.log("this.$refs.textEdit[0]", this.$refs.textEdit[0]);
@@ -252,11 +256,17 @@ export default {
             });
         },
         updateTask() {
-            // viene chiamata quando l'utente in fase di edit, preme ENTER, clicca sull'icona floppy, sposta il focus
+            // DESCRIZIONE:
+            // viene chiamata in tre casi menre l'utente è in fase di edit:
+            // l'utente preme ENTER, clicca sull'icona floppy o sposta il focus
+
             // faccio sparire il v-text-field per l'edit e faccio riapparire lo span con il testo
             this.taskToEditIndex = null;
         },
         setLocalStorage() {
+            // DESCRIZIONE:
+            // verifico se localStorage è disponibile e nel caso ci scrivo i dati (array tasks)
+
             if (this.localStorageAvailable) {
                 // scrivo l'array in Local Storage
                 localStorage.setItem("jatlaTasks", JSON.stringify(this.tasks));
@@ -268,6 +278,12 @@ export default {
             }
         },
         getLocalStorage() {
+            // DESCRIZIONE:
+            // questo metodo viene richiamato nell'hook "mounted"
+            // verifico se localStorage è disponibile e memorizzo l'informazione in un flag,
+            // poi leggo da loacalStorage i dati ("jatlaTasks")
+            // se il browser non supporta Local Storage, viene visualizzato un messaggio di avviso
+
             // verifico se il browser supporta il localStorage, uso la libreria (customizzata) Modernizr
             if (Modernizr.localstorage) {
                 console.log("browser localStorage available!");
@@ -289,6 +305,9 @@ export default {
         },
 
         saveTask(emittedTask) {
+            // DESCRIZIONE:
+            // ricevo il dato (nome del task) dal componente InputText e aggiorno la lista dei task
+
             // aggiungo il task inserito dall'utente nell'array "tasks"
             this.tasks.push({
                 done: false,
@@ -297,6 +316,10 @@ export default {
         },
 
         deleteAllTasks() {
+            // DESCRIZIONE:
+            // cancello tutta la lista dei task, prima di procedere
+            // viene visualizzata una finestra che chiede conferma all'utente
+
             // svuoto l'array dei task
             this.tasks = [];
             // chiudo la finestra di dialogo
@@ -309,6 +332,9 @@ export default {
             });
         },
         deleteTask(i) {
+            // DESCRIZIONE:
+            // cancello un singolo task dalla lista
+
             // rimuovo il singolo task
             this.tasks.splice(i, 1);
         },

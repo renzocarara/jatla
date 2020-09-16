@@ -43,13 +43,15 @@ export default {
     }),
     methods: {
         checkInput() {
+            // DESCRIZIONE:
+            // verifica la validità dell'input, se il dato è un input valido viene passato al
+            // componente chiamante generando un evento con $emit
             if (this.task !== null) {
                 // rimuovo dall'input eventuali leading and trailing blanks
                 let trimmedInput = this.task.trim();
                 if (trimmedInput !== "") {
                     // "emette" un evento verso "l'alto" per passare il dato di input al componente padre
                     this.$emit("emitTask", trimmedInput);
-                    console.log("dal TextInput.vue, this.$refs", this.$refs);
                 }
                 // resetto l'input (v-text-field)
                 this.task = null;
