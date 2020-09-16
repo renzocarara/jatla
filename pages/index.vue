@@ -16,13 +16,13 @@
 
                     <v-row class="my-1" align="center">
                         <strong class="mx-4 text--darken-2">
-                            Remaining: {{ remainingTasks }}
+                           Pending: {{pendingTasks }}
                         </strong>
 
                         <v-divider vertical></v-divider>
 
                         <strong class="mx-4 text--darken-2">
-                            Done: {{ completedTasks }}
+                            Done: {{ doneTasks }}
                         </strong>
 
                         <v-spacer></v-spacer>
@@ -136,6 +136,8 @@
           </v-card>
         </v-dialog>
 
+<!-- <clear-all-dialog v-if="deleteAllTasksDialog" @emitClearConfirmed="deleteAllTasks" />-->
+
         <!-- finestra di avviso per la cancellazione di tutti i task -->
         <v-dialog
           v-model="deleteAllTasksDialog"
@@ -177,6 +179,9 @@ import CardHeader from "~/components/CardHeader.vue";
 import TextInput from "~/components/TextInput.vue";
 
 export default {
+    head: {
+        //qui inserire l'head!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    },
     components: {
         CardHeader,
         TextInput,
@@ -218,7 +223,7 @@ export default {
     },
 
     computed: {
-        completedTasks() {
+        doneTasks() {
             // calcolo quanti task risultano completati
             // la filter mi restituisce un array con solo i task che hanno la proprità "done"=true
             // la length mi conta gli elementi di questo array creat dalla filter
@@ -226,11 +231,11 @@ export default {
         },
         progress() {
             // calcolo la percentuale di task completati (solo valore intero, no decimali)
-            return ((this.completedTasks / this.tasks.length) * 100).toFixed(0);
+            return ((this.doneTasks / this.tasks.length) * 100).toFixed(0);
         },
-        remainingTasks() {
+        pendingTasks() {
             // calcolo quanti task risultano da completare
-            return this.tasks.length - this.completedTasks;
+            return this.tasks.length - this.doneTasks;
         },
     },
 
