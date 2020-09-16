@@ -85,7 +85,7 @@
                                     v-model="task.text"
                                     color="teal" background-color="teal lighten-5"
                                     append-icon="mdi-content-save"
-                                    @click:append="updateTask" @keydown.enter="updateTask">
+                                    @click:append="updateTask" @keydown.enter="updateTask" @blur="updateTask">
                                 </v-text-field>
 
                                 <v-spacer></v-spacer>
@@ -121,7 +121,7 @@
                         dark
                         color="blue-grey"
                         nuxt
-                        @click="deleteAllTasks"
+                        @click="deleteAllTasksDialog=true"
                     >
                         <v-icon>mdi-trash-can-outline</v-icon> All
                     </v-btn>
@@ -155,6 +155,38 @@
           </v-card>
         </v-dialog>
 
+        <!-- finestra di avviso per la cancellazione di tutti i task -->
+        <v-dialog
+          v-model="deleteAllTasksDialog"
+          max-width="290"
+        >
+          <v-card>
+            <v-card-title class="headline">Warning: <br> Clear ALL</v-card-title>
+
+            <v-card-text>
+              You're are gonna delete all the Tasks in your List! Do you really want to proceed?
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>  
+              <v-btn
+                color="blue-grey"
+                dark
+                @click="deleteAllTasks"
+              >
+                Delete
+              </v-btn>
+              <v-btn
+                color="blue-grey"
+                dark
+                @click="deleteAllTasksDialog = false"
+              >
+                Cancel
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
     </v-layout>
 </template>
 
@@ -168,8 +200,9 @@ export default {
         MainTitle,
     },
     mounted() {
-        // intercetto l'evento chiusura tab/window del browser
-        window.addEventListener("beforeunload", this.isClosing);
+        // mi metto in ascolto  dell'evento chiusura tab/window del browser e quando lo intercetto
+        // aggiorno Local Storage (se supportato)
+        window.addEventListener("beforeunload", this.setLocalStorage);
 
         // verifico se il browser supporta il localStorage
         if (Modernizr.localstorage) {
@@ -209,6 +242,9 @@ export default {
 
         // è l'indice del task che l'utente vuole editare
         taskToEditIndex: null,
+
+        // abilita finestra di avviso per chiedere conferma della cancellazione di tutti i task
+        deleteAllTasksDialog: false,
     }),
 
     computed: {
@@ -246,12 +282,9 @@ export default {
             });
         },
         updateTask() {
+            // viene chiamata quando l'utente in fase di edit, preme ENTER, clicca sull'icona floppy, sposta il focus
             // faccio sparire il v-text-field per l'edit e faccio riapparire lo span con il testo
             this.taskToEditIndex = null;
-        },
-        isClosing() {
-            // aggiorno Local Storage (se supportato)
-            this.setLocalStorage();
         },
         setLocalStorage() {
             if (this.localStorageAvailable) {
@@ -285,8 +318,8 @@ export default {
             this.$refs.textInput.focus();
         },
         deleteAllTasks() {
-            // TBD eventuale finestra di verifica "Do you really want to remove all task?"
-
+            // chiudo la finestra di dialogo
+            this.deleteAllTasksDialog = false;
             // svuoto l'array dei task
             this.tasks = [];
             // setto il focus sul TextField
