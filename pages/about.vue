@@ -1,21 +1,15 @@
 <template>
     <v-layout>
         <v-flex>
-            <v-card class="mx-auto" max-width="400" color="teal lighten-4">
-                <v-card-title class="headline justify-center">
-                    <main-title />
-                    <span class="version pt-8 pl-1">v1.0.0</span>
-                </v-card-title>
+            <v-card class="mx-auto" width="400" color="teal lighten-4">
 
-                <v-card-subtitle class="pt-3 pb-0 mb-2 text-h6 text-center blue-grey--text">
-                     <span class="title-color">J</span>ust 
-                     <span class="title-color">A</span>nother 
-                     <span class="title-color">T</span>odos 
-                     <span class="title-color">L</span>ist 
-                     <span class="title-color">A</span>pp
-                </v-card-subtitle>
+                <card-header />
 
                 <v-card-text class="pb-0">
+                    <h4>VERSION</h4>
+                    <p>
+                        v1.0.0
+                    </p>
                     <h4>SCOPE</h4>
                     <p>
                         This web app is an exercise about the framework
@@ -73,17 +67,20 @@
 </template>
 
 <script>
-import MainTitle from "~/components/MainTitle.vue";
+import CardHeader from "~/components/CardHeader.vue";
 
 export default {
     components: {
-        MainTitle,
+        CardHeader,
     },
 };
 </script>
 
 <style lang="scss" scoped>
 //
+h4 {
+    color: teal;
+}
 .netlify-logo {
     width: 98px;
     height: 35px;

@@ -1,7 +1,7 @@
 
 // NOTE: dumb component, only for purpose of display, no logic of data flow
 <template>
-    <layout>
+    <div>
         <v-card-title class="headline justify-center">
             <h1>
                 <v-img
@@ -22,8 +22,7 @@
             <span class="title-color">L</span>ist 
             <span class="title-color">A</span>pp 
         </v-card-subtitle>
-    </layout>
-  
+</div>  
 </template>
 
 <style lang="scss" scoped>

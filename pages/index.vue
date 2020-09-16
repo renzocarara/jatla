@@ -1,134 +1,122 @@
 <template>
     <v-layout>
-        <v-flex>
-            <v-card class="mx-auto" max-width="400" color="teal lighten-4">
-                <v-card-title class="headline justify-center">
-                    <main-title />
-                </v-card-title>
+        <v-card class="mx-auto" width="400" color="teal lighten-4">
 
-                <v-card-subtitle class="pt-3 pb-0 mb-2 text-h6 text-center blue-grey--text">
-                    <span class="title-color">J</span>ust 
-                    <span class="title-color">A</span>nother 
-                    <span class="title-color">T</span>odos 
-                    <span class="title-color">L</span>ist 
-                    <span class="title-color">A</span>pp 
-                </v-card-subtitle>
+            <card-header />
+           
+            <v-card-text class="pb-0">
+                
+                <v-text-field
+                    ref="textInput"
+                    v-model="task"
+                    label="Add a new todo here..."
+                    solo color="teal" background-color="teal lighten-5"
+                    append-icon="mdi-playlist-plus"
+                    @click:append="createTask" @keydown.enter="createTask">
+                </v-text-field>
 
-                <v-card-text class="pb-0">
-                    
-                    <v-text-field
-                      ref="textInput"
-                      v-model="task"
-                      label="Add a new todo here..."
-                      solo color="teal" background-color="teal lighten-5"
-                      append-icon="mdi-playlist-plus"
-                      @click:append="createTask" @keydown.enter="createTask">
-                    </v-text-field>
+                <div v-if="tasks.length > 0">
 
-                    <div v-if="tasks.length > 0">
+                    <h2>Total:&nbsp;<span>{{ tasks.length }}</span></h2>
 
-                        <h2>Total:&nbsp;<span>{{ tasks.length }}</span></h2>
+                    <v-divider class="mt-4"></v-divider>
 
-                        <v-divider class="mt-4"></v-divider>
+                    <v-row class="my-1" align="center">
+                        <strong class="mx-4 text--darken-2">
+                            Remaining: {{ remainingTasks }}
+                        </strong>
 
-                        <v-row class="my-1" align="center">
-                            <strong class="mx-4 text--darken-2">
-                              Remaining: {{ remainingTasks }}
-                            </strong>
+                        <v-divider vertical></v-divider>
 
-                            <v-divider vertical></v-divider>
+                        <strong class="mx-4 text--darken-2">
+                            Done: {{ completedTasks }}
+                        </strong>
 
-                            <strong class="mx-4 text--darken-2">
-                              Done: {{ completedTasks }}
-                            </strong>
+                        <v-spacer></v-spacer>
+
+                        <v-progress-circular :value="progress" color="success" rotate="-90" class="mr-4">
+                            {{ progress }}
+                        </v-progress-circular>
+                    </v-row>
+
+                    <v-divider class="mb-4"></v-divider>
+
+                    <v-card>
+                        <div v-for="(task, i) in tasks">
+                            <v-divider
+                            v-if="i !== 0"
+                            :key="`${i}-divider`"
+                            ></v-divider>
+
+                            <v-list-item :key="`${i}-task`" class="px-2">
+                            <v-icon class="mr-2" @click="deleteTask(i)">mdi-trash-can-outline</v-icon>
+                            <v-list-item-action>
+                                <!-- quadratino della checkbox -->
+                                <v-checkbox
+                                v-model="task.done"
+                                :color="task.done ? 'grey' : ''"
+                                >
+                                </v-checkbox>
+                            </v-list-item-action>
+
+                            <!-- testo accanto al quadratino della checkbox -->
+                            <span v-if="taskToEditIndex==null || i!=taskToEditIndex"
+                                class="ml-3 break-word clickable"
+                                :class="task.done ? 'grey--text' : 'teal--text'"
+                                @click="editTask(i)">
+                                {{ task.text }}
+                            </span>
+
+                            <!-- text-field per editare il task -->
+                            <v-text-field v-else
+                                class="pl-3"
+                                ref="textEdit"
+                                dense
+                                v-model="task.text"
+                                color="teal" background-color="teal lighten-5"
+                                append-icon="mdi-content-save"
+                                @click:append="updateTask" @keydown.enter="updateTask" @blur="updateTask">
+                            </v-text-field>
 
                             <v-spacer></v-spacer>
 
-                            <v-progress-circular :value="progress" color="success" rotate="-90" class="mr-4">
-                               {{ progress }}
-                            </v-progress-circular>
-                        </v-row>
+                            <!-- baffo che indica task completato -->
+                            <v-scroll-x-transition>
+                                <v-icon
+                                large
+                                v-if="task.done"
+                                color="success"
+                                >
+                                mdi-check
+                                </v-icon>
+                            </v-scroll-x-transition>
 
-                        <v-divider class="mb-4"></v-divider>
+                            </v-list-item>
+                        </div>
+                    </v-card>
+                </div>
+                <!-- <div v-else>
+                    <h2 class="text-center pb-3">
+                    Your Todos List is empty!
+                    </h2>
+                </div> -->
 
-                        <v-card>
-                            <div v-for="(task, i) in tasks">
-                              <v-divider
-                                v-if="i !== 0"
-                                :key="`${i}-divider`"
-                              ></v-divider>
-
-                              <v-list-item :key="`${i}-task`" class="px-2">
-                                <v-icon class="mr-2" @click="deleteTask(i)">mdi-trash-can-outline</v-icon>
-                                <v-list-item-action>
-                                  <!-- quadratino della checkbox -->
-                                  <v-checkbox
-                                    v-model="task.done"
-                                    :color="task.done ? 'grey' : ''"
-                                  >
-                                  </v-checkbox>
-                                </v-list-item-action>
-
-                                <!-- testo accanto al quadratino della checkbox -->
-                                <span v-if="taskToEditIndex==null || i!=taskToEditIndex"
-                                    class="ml-3 break-word clickable"
-                                    :class="task.done ? 'grey--text' : 'teal--text'"
-                                    @click="editTask(i)">
-                                    {{ task.text }}
-                                </span>
-
-                                <!-- text-field per editare il task -->
-                                <v-text-field v-else
-                                    class="pl-3"
-                                    ref="textEdit"
-                                    dense
-                                    v-model="task.text"
-                                    color="teal" background-color="teal lighten-5"
-                                    append-icon="mdi-content-save"
-                                    @click:append="updateTask" @keydown.enter="updateTask" @blur="updateTask">
-                                </v-text-field>
-
-                                <v-spacer></v-spacer>
-
-                                <!-- baffo che indica task completato -->
-                                <v-scroll-x-transition>
-                                  <v-icon
-                                    large
-                                    v-if="task.done"
-                                    color="success"
-                                  >
-                                    mdi-check
-                                  </v-icon>
-                                </v-scroll-x-transition>
-
-                              </v-list-item>
-                            </div>
-                        </v-card>
-                    </div>
-                    <!-- <div v-else>
-                       <h2 class="text-center pb-3">
-                        Your Todos List is empty!
-                        </h2>
-                    </div> -->
-
-                </v-card-text>
-                
-                
-                <hr v-if="tasks.length > 0" class="my-3" />
-                <v-card-actions  v-if="tasks.length > 0">
-                    <v-spacer />
-                    <v-btn
-                        dark
-                        color="blue-grey"
-                        nuxt
-                        @click="deleteAllTasksDialog=true"
-                    >
-                        <v-icon>mdi-trash-can-outline</v-icon> All
-                    </v-btn>
-                </v-card-actions>
-
-            </v-card>
-        </v-flex>
+            </v-card-text>
+            
+            
+            <hr v-if="tasks.length > 0" class="my-3" />
+            <v-card-actions  v-if="tasks.length > 0">
+                <v-spacer />
+                <v-btn
+                    dark
+                    color="blue-grey"
+                    nuxt
+                    @click="deleteAllTasksDialog=true"
+                >
+                    <v-icon>mdi-trash-can-outline</v-icon> All
+                </v-btn>
+            </v-card-actions>
+        </v-card>
 
         <!-- finestra di avviso se non è disponibile il localStorage del browser -->
         <v-dialog
@@ -186,47 +174,32 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-
     </v-layout>
 </template>
 
 
 
 <script>
-import MainTitle from "~/components/MainTitle.vue";
+import CardHeader from "~/components/CardHeader.vue";
 
 export default {
     components: {
-        MainTitle,
+        CardHeader,
     },
     mounted() {
         // mi metto in ascolto  dell'evento chiusura tab/window del browser e quando lo intercetto
         // aggiorno Local Storage (se supportato)
         window.addEventListener("beforeunload", this.setLocalStorage);
 
-        // verifico se il browser supporta il localStorage
-        if (Modernizr.localstorage) {
-            console.log("browser localStorage available!");
-            this.localStorageAvailable = true;
-            // verifico se è definito nel Local Storage l'array dei task
-            if (JSON.parse(localStorage.getItem("jatlaTasks")) !== null) {
-                console.log("jatlatasks esiste");
-                this.tasks = JSON.parse(localStorage.getItem("jatlaTasks"));
-            } else {
-                console.log("jatlatask non esiste!");
-            }
-        } else {
-            //dialog che avvisa LocalStorage not available!
-            this.localStorageDialog = true;
-            console.log(
-                "browser localStorage not available! Web App will execute with some limitations!!"
-            );
-        }
-        // posiziono il focus sul v-text-field di input
-        this.focusOnTextField();
+        // recupero la lista task ("jatlaTasks"), se presente nel localStorage
+        this.getLocalStorage();
+
+        // setto il focus sul v-text-field di input
+        this.$refs.textInput.focus();
     },
     beforeDestroy() {
-        // aggiorno Local Storage (se supportato)
+        // aggiorno Local Storage (se supportato) quando la pagina viene lasciata
+        // in modo che al reload della pagina vengano trovati e ricaricati i dati dal localStorage
         this.setLocalStorage();
     },
     data: () => ({
@@ -235,9 +208,9 @@ export default {
         // abilita finestra di avviso se il browser NON supporta il localStorage
         localStorageDialog: false,
 
-        // array che mi conterrà i task inseriti
+        // array che mi conterrà tutti i task inseriti
         tasks: [],
-        // task inserito dall'utente
+        // singolo task inserito dall'utente
         task: null,
 
         // è l'indice del task che l'utente vuole editare
@@ -297,7 +270,26 @@ export default {
                 // );
             }
         },
-        getLocalStorage() {},
+        getLocalStorage() {
+            // verifico se il browser supporta il localStorage, uso la libreria (customizzata) Modernizr
+            if (Modernizr.localstorage) {
+                console.log("browser localStorage available!");
+                this.localStorageAvailable = true;
+                // verifico se è definito nel Local Storage l'array dei task
+                if (JSON.parse(localStorage.getItem("jatlaTasks")) !== null) {
+                    console.log("jatlatasks esiste");
+                    this.tasks = JSON.parse(localStorage.getItem("jatlaTasks"));
+                } else {
+                    console.log("jatlatask non esiste!");
+                }
+            } else {
+                //dialog che avvisa LocalStorage not available!
+                this.localStorageDialog = true;
+                console.log(
+                    "browser localStorage not available! Web App will execute with some limitations!!"
+                );
+            }
+        },
         createTask() {
             if (this.task !== null) {
                 // rimuovo dall'input eventuali leading and trailing blanks
@@ -313,21 +305,18 @@ export default {
                 this.task = null;
             }
         },
-        focusOnTextField() {
-            // setto il focus sul v-text-field di input
-            this.$refs.textInput.focus();
-        },
         deleteAllTasks() {
-            // chiudo la finestra di dialogo
-            this.deleteAllTasksDialog = false;
             // svuoto l'array dei task
             this.tasks = [];
-            // setto il focus sul TextField
-            this.focusOnTextField();
+            // chiudo la finestra di dialogo
+            this.deleteAllTasksDialog = false;
+            this.$nextTick(() => {
+                // setto il focus sul v-text-field di input, con la nextTick, aspetto che Vue abbia aggiornato il DOM,
+                // rimuovendo la finestra di dialog che appare sopra tutto
+                this.$refs.textInput.focus();
+            });
         },
         deleteTask(i) {
-            // TBD eventuale finestra di verifica "Do you really want to remove this task?"
-
             // rimuovo il singolo task
             this.tasks.splice(i, 1);
         },

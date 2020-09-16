@@ -1,24 +1,9 @@
 <template>
     <v-layout>
         <v-flex>
-            <v-card class="mx-auto" max-width="400" color="teal lighten-4">
-                <v-card-title class="headline justify-center">
-                    <main-title />
-                </v-card-title>
+            <v-card class="mx-auto" width="400" color="teal lighten-4">
 
-                <v-card-subtitle class="pt-3 pb-0 mb-2 text-h6 text-center blue-grey--text">
-                     <span class="title-color">J</span>ust 
-                     <span class="title-color">A</span>nother 
-                     <span class="title-color">T</span>odos 
-                     <span class="title-color">L</span>ist 
-                     <span class="title-color">A</span>pp
-                     <br>
-                    <span
-                        ><v-icon size="30" color="teal accent-4"
-                            >mdi-alert-circle-outline</v-icon
-                        ></span
-                    >Warning!
-                </v-card-subtitle>
+                <card-header />
 
                 <v-card-text  class="text-center">
                     <img
@@ -47,11 +32,11 @@
 </template>
 
 <script>
-import MainTitle from "~/components/MainTitle.vue";
+import CardHeader from "~/components/CardHeader.vue";
 
 export default {
     components: {
-        MainTitle,
+        CardHeader,
     },
     props: {
         error: {
