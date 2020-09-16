@@ -5,15 +5,8 @@
             <card-header />
            
             <v-card-text class="pb-0">
-                
-                <v-text-field
-                    ref="textInput"
-                    v-model="task"
-                    label="Add a new todo here..."
-                    solo color="teal" background-color="teal lighten-5"
-                    append-icon="mdi-playlist-plus"
-                    @click:append="createTask" @keydown.enter="createTask">
-                </v-text-field>
+
+                <text-input @emitTask="saveTask" />
 
                 <div v-if="tasks.length > 0">
 
@@ -181,10 +174,12 @@
 
 <script>
 import CardHeader from "~/components/CardHeader.vue";
+import TextInput from "~/components/TextInput.vue";
 
 export default {
     components: {
         CardHeader,
+        TextInput,
     },
     mounted() {
         // mi metto in ascolto  dell'evento chiusura tab/window del browser e quando lo intercetto
@@ -194,31 +189,33 @@ export default {
         // recupero la lista task ("jatlaTasks"), se presente nel localStorage
         this.getLocalStorage();
 
-        // setto il focus sul v-text-field di input
-        this.$refs.textInput.focus();
+        // // setto il focus sul v-text-field di input
+        // this.$refs.textInput.focus();
     },
     beforeDestroy() {
         // aggiorno Local Storage (se supportato) quando la pagina viene lasciata
         // in modo che al reload della pagina vengano trovati e ricaricati i dati dal localStorage
         this.setLocalStorage();
     },
-    data: () => ({
-        // indica se il browser supporta il localStorage
-        localStorageAvailable: false,
-        // abilita finestra di avviso se il browser NON supporta il localStorage
-        localStorageDialog: false,
+    data() {
+        return {
+            // indica se il browser supporta il localStorage
+            localStorageAvailable: false,
+            // abilita finestra di avviso se il browser NON supporta il localStorage
+            localStorageDialog: false,
 
-        // array che mi conterrà tutti i task inseriti
-        tasks: [],
-        // singolo task inserito dall'utente
-        task: null,
+            // array che mi conterrà tutti i task inseriti
+            tasks: [],
+            // // singolo task inserito dall'utente
+            // task: null,
 
-        // è l'indice del task che l'utente vuole editare
-        taskToEditIndex: null,
+            // è l'indice del task che l'utente vuole editare
+            taskToEditIndex: null,
 
-        // abilita finestra di avviso per chiedere conferma della cancellazione di tutti i task
-        deleteAllTasksDialog: false,
-    }),
+            // abilita finestra di avviso per chiedere conferma della cancellazione di tutti i task
+            deleteAllTasksDialog: false,
+        };
+    },
 
     computed: {
         completedTasks() {
@@ -290,30 +287,25 @@ export default {
                 );
             }
         },
-        createTask() {
-            if (this.task !== null) {
-                // rimuovo dall'input eventuali leading and trailing blanks
-                let trimmedInput = this.task.trim();
-                if (trimmedInput !== "") {
-                    // aggiungo il task nell'array "tasks"
-                    this.tasks.push({
-                        done: false,
-                        text: trimmedInput,
-                    });
-                }
-                // resetto l'input (v-text-field)
-                this.task = null;
-            }
+
+        saveTask(emittedTask) {
+            // aggiungo il task inserito dall'utente nell'array "tasks"
+            this.tasks.push({
+                done: false,
+                text: emittedTask,
+            });
         },
+
         deleteAllTasks() {
             // svuoto l'array dei task
             this.tasks = [];
             // chiudo la finestra di dialogo
             this.deleteAllTasksDialog = false;
+
             this.$nextTick(() => {
                 // setto il focus sul v-text-field di input, con la nextTick, aspetto che Vue abbia aggiornato il DOM,
                 // rimuovendo la finestra di dialog che appare sopra tutto
-                this.$refs.textInput.focus();
+                this.$el.querySelector("#text-input").focus();
             });
         },
         deleteTask(i) {
