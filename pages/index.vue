@@ -8,7 +8,7 @@
 
                 <text-input @emitTask="saveTask" />
 
-                <div v-if="tasks.length > 0">
+                <div v-if="listNotEmpty">
 
                     <h2>Total:&nbsp;<span>{{ tasks.length }}</span></h2>
 
@@ -34,7 +34,7 @@
 
                     <v-divider class="mb-4"></v-divider>
 
-                    <v-card>
+                    <v-card >
                         <div v-for="(task, i) in tasks">
                             <v-divider
                             v-if="i !== 0"
@@ -96,79 +96,34 @@
 
             </v-card-text>
             
-            
-            <hr v-if="tasks.length > 0" class="my-3" />
-            <v-card-actions  v-if="tasks.length > 0">
-                <v-spacer />
-                <v-btn
-                    dark
-                    color="blue-grey"
-                    nuxt
-                    @click="deleteAllTasksDialog=true"
-                >
-                    <v-icon>mdi-trash-can-outline</v-icon> All
-                </v-btn>
-            </v-card-actions>
+            <div v-if="listNotEmpty">
+                <hr class="my-3" />
+                <v-card-actions >
+                    <v-spacer />
+                    <v-btn
+                        dark
+                        color="blue-grey"
+                        nuxt
+                        @click="deleteAllTasksDialog=true"
+                    >
+                        <v-icon>mdi-trash-can-outline</v-icon> All
+                    </v-btn>
+                </v-card-actions>
+            </div>
         </v-card>
 
         <!-- finestra di avviso se non è disponibile il localStorage del browser -->
-        <v-dialog
-          v-model="localStorageDialog"
-          max-width="290"
-        >
-          <v-card>
-            <v-card-title class="headline">Warning: <br> Local Storage issue</v-card-title>
-
-            <v-card-text>
-              Your browser doesn't support Local Storage. This app can still run but with limitations. Data persistency is not achievable.
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>  
-              <v-btn
-                color="blue-grey"
-                dark
-                @click="localStorageDialog = false"
-              >
-                Continue
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-
-<!-- <clear-all-dialog v-if="deleteAllTasksDialog" @emitClearConfirmed="deleteAllTasks" />-->
-
+        <local-storage-dialog v-if="showLocalStorageDialog" @emitLocalStorageDialogDismissed="setFocusOnTextInput"/>
+        
         <!-- finestra di avviso per la cancellazione di tutti i task -->
-        <v-dialog
-          v-model="deleteAllTasksDialog"
-          max-width="290"
-        >
-          <v-card>
-            <v-card-title class="headline">Warning: <br> Clear ALL</v-card-title>
-
-            <v-card-text>
-              You're are gonna delete all the Tasks in your List! Do you really want to proceed?
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>  
-              <v-btn
-                color="blue-grey"
-                dark
-                @click="deleteAllTasks"
-              >
-                Delete
-              </v-btn>
-              <v-btn
-                color="blue-grey"
-                dark
-                @click="deleteAllTasksDialog = false"
-              >
-                Cancel
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+        <trash-all-dialog v-if="deleteAllTasksDialog"
+        @emitConfirmed="deleteAllTasksConfirmed" @emitCancelled="deleteAllTasksCancelled" 
+        :dialogTitleLabel="dialogTitleLabel"
+        :dialogTitleText="dialogTitleText"
+        :dialogMessage="dialogMessage"
+        :dialogConfirmBtn="dialogConfirmBtn"
+        :dialogCancelBtn="dialogCancelBtn"
+        />
     </v-layout>
 </template>
 
@@ -177,14 +132,13 @@
 <script>
 import CardHeader from "~/components/CardHeader.vue";
 import TextInput from "~/components/TextInput.vue";
+import LocalStorageDialog from "~/components/LocalStorageDialog.vue";
 
 export default {
-    head: {
-        //qui inserire l'head!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    },
     components: {
         CardHeader,
         TextInput,
+        LocalStorageDialog,
     },
     mounted() {
         // mi metto in ascolto  dell'evento chiusura tab/window del browser e quando lo intercetto
@@ -207,22 +161,43 @@ export default {
             // indica se il browser supporta il localStorage
             localStorageAvailable: false,
             // abilita finestra di avviso se il browser NON supporta il localStorage
-            localStorageDialog: false,
+            showLocalStorageDialog: false,
 
             // array che mi conterrà tutti i task inseriti
             tasks: [],
-            // // singolo task inserito dall'utente
-            // task: null,
 
             // è l'indice del task che l'utente vuole editare
             taskToEditIndex: null,
 
             // abilita finestra di avviso per chiedere conferma della cancellazione di tutti i task
             deleteAllTasksDialog: false,
+            dialogTitleLabel: "Warning",
+            dialogTitleText: "Clear ALL",
+            dialogMessage:
+                "You're are gonna delete all the Tasks in your List! Do you really want to proceed?",
+            dialogConfirmBtn: "DELETE",
+            dialogCancelBtn: "CANCEL",
         };
     },
-
+    head() {
+        return {
+            titleTemplate: "%s - " + "Todos List App",
+            title: "JATLA",
+            meta: [
+                // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+                {
+                    hid: "description",
+                    name: "Main Page",
+                    content: "JATLA web App",
+                },
+            ],
+        };
+    },
     computed: {
+        listNotEmpty() {
+            // indica se c'è almeno 1 task nella lista dei Todos
+            return this.tasks.length > 0;
+        },
         doneTasks() {
             // calcolo quanti task risultano completati
             // la filter mi restituisce un array con solo i task che hanno la proprità "done"=true
@@ -302,7 +277,7 @@ export default {
                 }
             } else {
                 //dialog che avvisa LocalStorage not available!
-                this.localStorageDialog = true;
+                this.showLocalStorageDialog = true;
                 console.log(
                     "browser localStorage not available! Web App will execute with some limitations!!"
                 );
@@ -320,7 +295,7 @@ export default {
             });
         },
 
-        deleteAllTasks() {
+        deleteAllTasksConfirmed() {
             // DESCRIZIONE:
             // cancello tutta la lista dei task, prima di procedere
             // viene visualizzata una finestra che chiede conferma all'utente
@@ -336,12 +311,29 @@ export default {
                 this.$el.querySelector("#text-input").focus();
             });
         },
+        deleteAllTasksCancelled() {
+            // DESCRIZIONE:
+            // l'utente a abortito l'operazione di cancellazione di tutti i tasks
+
+            // ripristino il flag della finestra di dialogo
+            this.deleteAllTasksDialog = false;
+        },
         deleteTask(i) {
             // DESCRIZIONE:
             // cancello un singolo task dalla lista
 
             // rimuovo il singolo task
             this.tasks.splice(i, 1);
+        },
+        setFocusOnTextInput() {
+            // DESCRIZIONE:
+            // setta il focus sul text-field di input
+
+            this.$nextTick(() => {
+                // setto il focus sul v-text-field di input, con la nextTick, aspetto che Vue abbia aggiornato il DOM,
+                // rimuovendo la finestra di dialog che appare sopra tutto
+                this.$el.querySelector("#text-input").focus();
+            });
         },
     },
 };
@@ -357,6 +349,7 @@ export default {
     cursor: pointer;
 }
 
+// formattazione riquadrino che contiene la data
 ::v-deep .v-list-item .v-text-field .v-input__control {
     height: 30px;
 }

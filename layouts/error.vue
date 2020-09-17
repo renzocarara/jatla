@@ -50,8 +50,6 @@ export default {
             otherError: "Something went wrong!",
         };
     },
-
-    layout: "empty",
     head() {
         const title =
             this.error.statusCode === 404 ? this.pageNotFound : this.otherError;
@@ -62,8 +60,8 @@ export default {
                 // hid is used as unique identifier. Do not use `vmid` for it as it will not work
                 {
                     hid: "description",
-                    name: "Pagina di errore",
-                    content: "Errore",
+                    name: "Error Page",
+                    content: "Error",
                 },
             ],
         };

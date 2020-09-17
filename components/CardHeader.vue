@@ -11,6 +11,7 @@
                     contain
                 ></v-img>
                 <span class="font-weight-black title-color text-h3 mr-3">Jatla</span>
+                <!-- visualizzo il day+weekday solo sulla pagina principale -->
                 <div v-if="$nuxt.$route.path=='/'" class="teal lighten-5 blue-grey--text">
                     <div class="date-border d-flex flex-column align-center blue-grey--text rounded">
                         <h3 class="font-weight-medium lh08">{{ dateString | day }}</h3>

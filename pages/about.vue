@@ -73,6 +73,20 @@ export default {
     components: {
         CardHeader,
     },
+    head() {
+        return {
+            titleTemplate: "%s - " + "Todos List App - About",
+            title: "JATLA",
+            meta: [
+                // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+                {
+                    hid: "description",
+                    name: "About Page",
+                    content: "Information about JATLA web App",
+                },
+            ],
+        };
+    },
 };
 </script>
 
