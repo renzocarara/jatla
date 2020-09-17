@@ -24,7 +24,7 @@
                     <p>
                         Allow to create a classic Todo List.<br/> Data is saved in a persistent way through the browser's LocalStorage.
                         If LocalStorage is not available in your browser, a warning message is displayed.<br/>
-                        You can add, modify and delete tasks. You can toggle task status between "Done" and "Remaining" through the related checkbox.
+                        You can add, modify and delete tasks. You can toggle task status between "Pending" and "Done" through the related checkbox.
                     </p>
                     
                     

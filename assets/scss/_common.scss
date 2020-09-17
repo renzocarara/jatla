@@ -1,6 +1,6 @@
 @import "_my_variables.scss";
 
-/* animazioni cambio pagina */
+/* animazioni di vuetify per cambio pagina, customizzati i tempi */
 .page-enter-active {
   transition: opacity 1.5s;
 }
@@ -21,4 +21,7 @@
 }
 .subtitle-color {
   color: #006977;
+}
+.fz18 {
+  font-size: 18px;
 }

@@ -1,5 +1,6 @@
 <template>
        <v-text-field
+            class="fz18"
             id="text-input"
             v-model="task"
             placeholder="Add a new todo here..."

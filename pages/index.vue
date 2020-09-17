@@ -10,7 +10,7 @@
 
                 <div v-if="listNotEmpty">
 
-                    <h2>Total:&nbsp;<span>{{ tasks.length }}</span></h2>
+                    <h2>All:&nbsp;<span>{{ tasks.length }}</span></h2>
 
                     <v-divider class="mt-4"></v-divider>
 
@@ -42,47 +42,47 @@
                             ></v-divider>
 
                             <v-list-item :key="`${i}-task`" class="px-2">
-                            <v-icon class="mr-2" @click="deleteTask(i)">mdi-trash-can-outline</v-icon>
-                            <v-list-item-action>
-                                <!-- quadratino della checkbox -->
-                                <v-checkbox
-                                v-model="task.done"
-                                :color="task.done ? 'grey' : ''"
-                                >
-                                </v-checkbox>
-                            </v-list-item-action>
+                                <v-icon class="mr-2" @click="deleteTask(i)">mdi-trash-can-outline</v-icon>
+                                <v-list-item-action>
+                                    <!-- quadratino della checkbox -->
+                                    <v-checkbox
+                                    v-model="task.done"
+                                    :color="task.done ? 'grey' : ''"
+                                    >
+                                    </v-checkbox>
+                                </v-list-item-action>
 
-                            <!-- testo accanto al quadratino della checkbox -->
-                            <span v-if="taskToEditIndex==null || i!=taskToEditIndex"
-                                class="ml-3 break-word clickable"
-                                :class="task.done ? 'grey--text' : 'teal--text'"
-                                @click="editTask(i)">
-                                {{ task.text }}
-                            </span>
+                                <!-- testo accanto al quadratino della checkbox -->
+                                <span v-if="taskToEditIndex==null || i!=taskToEditIndex"
+                                    class="ml-3 task-text"
+                                    :class="task.done ? 'grey--text' : 'teal--text'"
+                                    @click="editTask(i)">
+                                    <strong>{{ task.text }}</strong>
+                                </span>
 
-                            <!-- text-field per editare il task -->
-                            <v-text-field v-else
-                                class="pl-3"
-                                ref="textEdit"
-                                dense
-                                v-model="task.text"
-                                color="teal" background-color="teal lighten-5"
-                                append-icon="mdi-content-save"
-                                @click:append="updateTask" @keydown.enter="updateTask" @blur="updateTask">
-                            </v-text-field>
+                                <!-- text-field per editare il task -->
+                                <v-text-field v-else
+                                    class="pl-3 fz18"
+                                    ref="textEdit"
+                                    dense
+                                    v-model="task.text"
+                                    color="teal" background-color="teal lighten-5"
+                                    append-icon="mdi-content-save"
+                                    @click:append="updateTask" @keydown.enter="updateTask" @blur="updateTask">
+                                </v-text-field>
 
-                            <v-spacer></v-spacer>
+                                <v-spacer></v-spacer>
 
-                            <!-- baffo che indica task completato -->
-                            <v-scroll-x-transition>
-                                <v-icon
-                                large
-                                v-if="task.done"
-                                color="success"
-                                >
-                                mdi-check
-                                </v-icon>
-                            </v-scroll-x-transition>
+                                <!-- baffo che indica task completato -->
+                                <v-scroll-x-transition>
+                                    <v-icon
+                                    large
+                                    v-if="task.done"
+                                    color="success"
+                                    >
+                                    mdi-check
+                                    </v-icon>
+                                </v-scroll-x-transition>
 
                             </v-list-item>
                         </div>
@@ -342,11 +342,10 @@ export default {
 .task-list {
     background-color: $teal-lighten-5;
 }
-.break-word {
+.task-text {
     word-break: break-word;
-}
-.clickable {
     cursor: pointer;
+    font-size: 18px;
 }
 
 // formattazione riquadrino che contiene la data

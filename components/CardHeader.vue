@@ -12,7 +12,7 @@
                 ></v-img>
                 <span class="font-weight-black title-color text-h3 mr-3">atla</span>
                 <!-- visualizzo il day+weekday solo sulla pagina principale -->
-                <div v-if="$nuxt.$route.path=='/'" class="teal lighten-5 blue-grey--text">
+                <div v-if="$nuxt.$route.path=='/'" class="teal lighten-5 blue-grey--text rounded">
                     <div class="date-border d-flex flex-column align-center blue-grey--text rounded">
                         <h3 class="font-weight-medium lh">{{ dateString | day }}</h3>
                         <h5 class="font-weight-medium lh">{{ dateString | weekday }}</h5>
