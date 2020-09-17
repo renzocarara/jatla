@@ -16,5 +16,9 @@
 }
 
 .title-color {
-  color: $teal-lighten-1;
+  color: $teal-lighten-4;
+  text-shadow: -5px 0 #006977, 0 1px #006977, 1px 0 #006977, 0 -1px #006977;
+}
+.subtitle-color {
+  color: #006977;
 }

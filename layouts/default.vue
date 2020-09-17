@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-main class="d-flex align-center teal lighten-3">
-            <v-container>
+            <v-container class="px-2">
                 <nuxt />
             </v-container>
         </v-main>

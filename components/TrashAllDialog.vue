@@ -1,8 +1,9 @@
 <template>
-    <!-- finestra di avviso per conferma o cancellazione-->
+    <!-- finestra di avviso per conferma o cancellazione -->
     <v-dialog
         v-model="dialogVisibility"
         max-width="290"
+        persistent
     >
         <v-card>
         <v-card-title class="headline">{{ dialogTitleLabel }}: <br> {{ dialogTitleText }}</v-card-title>

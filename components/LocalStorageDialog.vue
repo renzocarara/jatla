@@ -2,6 +2,7 @@
     <v-dialog
       v-model="dialogVisibility"
       max-width="290"
+      persistent
     >
       <v-card>
         <v-card-title class="headline">Warning: <br> Local Storage issue</v-card-title>

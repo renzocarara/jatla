@@ -100,7 +100,7 @@
                 <hr class="my-3" />
                 <v-card-actions >
                     <v-spacer />
-                    <v-btn
+                    <v-btn class="mr-2"
                         dark
                         color="blue-grey"
                         nuxt
