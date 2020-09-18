@@ -30,7 +30,13 @@ export default {
         name: "description",
         content:
           "A simple Todos List App with persistence through localStorage" || ""
-      }
+      },
+      {
+        property: "og:image",
+        content: "https://morgana.netlify.app/jatla_snapshot.png"
+      },
+
+      { property: "og:url", content: "https://jatla.netlify.app/" }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
     // script: [
