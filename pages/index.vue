@@ -135,7 +135,7 @@ export default {
         // mi metto in ascolto  dell'evento chiusura tab/window del browser e quando lo intercetto
         // aggiorno Local Storage (se supportato)
         // window.addEventListener("beforeunload", this.setLocalStorage);
-        window.onbeforeunload = this.setLocalStorage;
+        window.onunload = window.onbeforeunload = this.setLocalStorage;
 
         // recupero la lista task ("jatlaTasks"), se presente nel localStorage
         this.getLocalStorage();
@@ -295,11 +295,8 @@ export default {
                 text: emittedTask,
             });
 
-            this.$nextTick(() => {
-                // setto il focus sul v-text-field di input, con la nextTick, aspetto che Vue abbia aggiornato il DOM,
-                // rimuovendo la finestra di dialog che appare sopra tutto
-                this.$el.querySelector("#text-input").blur();
-            });
+            // rimuovo il focus sul v-text-field di input
+            this.$el.querySelector("#text-input").blur();
         },
 
         deleteAllTasksConfirmed() {
