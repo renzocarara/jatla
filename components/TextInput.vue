@@ -14,7 +14,7 @@
 export default {
     mounted() {
         // setto il focus sul v-text-field di input
-        this.$el.querySelector("#text-input").focus();
+        // this.$el.querySelector("#text-input").focus();
     },
     data: () => ({
         // singolo task inserito dall'utente

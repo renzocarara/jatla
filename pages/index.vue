@@ -134,7 +134,8 @@ export default {
     mounted() {
         // mi metto in ascolto  dell'evento chiusura tab/window del browser e quando lo intercetto
         // aggiorno Local Storage (se supportato)
-        window.addEventListener("beforeunload", this.setLocalStorage);
+        // window.addEventListener("beforeunload", this.setLocalStorage);
+        window.onbeforeunload = this.setLocalStorage;
 
         // recupero la lista task ("jatlaTasks"), se presente nel localStorage
         this.getLocalStorage();
@@ -237,7 +238,7 @@ export default {
         },
         updateTask() {
             // DESCRIZIONE:
-            // viene chiamata in tre casi menre l'utente è in fase di edit:
+            // viene chiamata in tre casi mentre l'utente è in fase di edit:
             // l'utente preme ENTER, clicca sull'icona floppy o sposta il focus
 
             // faccio sparire il v-text-field per l'edit e faccio riapparire lo span con il testo
@@ -292,6 +293,12 @@ export default {
             this.tasks.push({
                 done: false,
                 text: emittedTask,
+            });
+
+            this.$nextTick(() => {
+                // setto il focus sul v-text-field di input, con la nextTick, aspetto che Vue abbia aggiornato il DOM,
+                // rimuovendo la finestra di dialog che appare sopra tutto
+                this.$el.querySelector("#text-input").blur();
             });
         },
 
