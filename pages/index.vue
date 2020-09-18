@@ -400,6 +400,6 @@ export default {
 .text-done {
     color: green;
     font-style: italic;
-    opacity: 50%;
+    opacity: 0.5;
 }
 </style>
