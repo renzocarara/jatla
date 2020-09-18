@@ -49,7 +49,8 @@
                                     <!-- quadratino della checkbox -->
                                     <v-checkbox
                                     v-model="task.done"
-                                    :color="task.done ? 'green' : ''">
+                                    :color="task.done ? 'green' : ''"
+                                    @click="updateTaskStatus(i, task.done)">
                                     </v-checkbox>
                                 </v-list-item-action>
 
@@ -249,10 +250,10 @@ export default {
                 // scrivo l'array in Local Storage
                 localStorage.setItem("jatlaTasks", JSON.stringify(this.tasks));
 
-                // console.log(
-                //     "jatlaTasks:",
-                //     JSON.parse(localStorage.getItem("jatlaTasks"))
-                // );
+                console.log(
+                    "salvato jatlaTasks:",
+                    JSON.parse(localStorage.getItem("jatlaTasks"))
+                );
             }
         },
         getLocalStorage() {
@@ -297,6 +298,17 @@ export default {
 
             // rimuovo il focus sul v-text-field di input per evitare che la virtual keyboard su mobile rimanga visualizzata
             this.$el.querySelector("#text-input").blur();
+        },
+
+        updateTaskStatus(index, status) {
+            // DESCRIZIONE:
+            // aggiorno lo status del task nella lista dei task
+
+            // aggiorno il task
+            this.tasks[index].done = status;
+
+            // aggiorno localStorage
+            this.setLocalStorage();
         },
 
         deleteAllTasksConfirmed() {
