@@ -12,13 +12,20 @@
                     </p>
                     <h4>SCOPE</h4>
                     <p>
-                        This web app is an exercise about the framework
+                        This web app is a very simple exercise about
+                        <a
+                            href="https://vuejs.org/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >Vue.js
+                        </a> 
+                        and the framework 
                         <a
                             href="https://nuxtjs.org/"
                             target="_blank"
                             rel="noopener noreferrer"
                             >Nuxt.js
-                        </a>
+                        </a>.
                     </p>
                     <h4>HOW IT WORKS</h4>
                     <p>
@@ -27,9 +34,9 @@
                         If LocalStorage is not available in your browser, a warning message is displayed.<br/>
                         You can:
                         <ul>
-                            <li>Add, modify and delete tasks.</li>
-                            <li>Toggle task's status between "Pending" and "Done"</li>
-                            <li>Filter tasks based on status.</li>
+                            <li>add, modify and delete tasks.</li>
+                            <li>toggle task's status between "Pending" and "Done".</li>
+                            <li>filter tasks based on status.</li>
                         </ul>
                     </p>
                     

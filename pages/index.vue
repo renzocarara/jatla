@@ -4,7 +4,7 @@
 
             <card-header />
            
-            <v-card-text class="pb-0">
+            <v-card-text class="pb-0 pt-1">
 
                 <text-input @emitTask="saveTask" />
 

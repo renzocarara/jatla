@@ -12,14 +12,15 @@
                 ></v-img>
                 <span class="font-weight-black title-color text-h3 mr-3">atla</span>
                 <!-- visualizzo il day+weekday solo sulla pagina principale -->
-                <div v-if="$nuxt.$route.path=='/'" class="teal lighten-5 blue-grey--text rounded">
+                <!-- NOTA: "day" e "weekday" sono dei filtri definiti globalmente -->
+                <!-- <div v-if="$nuxt.$route.path=='/'" class="teal lighten-5 blue-grey--text rounded">
                     <div class="date-border d-flex flex-column align-center blue-grey--text rounded">
                         <h3 class="font-weight-medium lh">{{ dateString | day }}</h3>
                         <h5 class="font-weight-medium lh">{{ dateString | weekday }}</h5>
-                        <!-- {{ dateString }} -->
                     </div>
-                </div>
+                </div> -->
         </v-card-title>
+        <h4 v-if="$nuxt.$route.path=='/'" class="font-weight-medium text-center blue-grey--text">{{ dateString }}</h4>
 
         <v-card-subtitle v-if="$nuxt.$route.path=='/about'" class="pt-3 pb-0 mb-2 text-h6 text-center blue-grey--text">
             <span class="subtitle-color ">J</span>ust 
@@ -34,23 +35,9 @@
 <script>
 import moment from "moment";
 export default {
-    filters: {
-        day: function (value) {
-            if (value) {
-                return moment(String(value), "dddd DD MMM YYYY").format(
-                    "D MMM"
-                );
-            }
-        },
-        weekday: function (value) {
-            if (value) {
-                return moment(String(value), "dddd DD MMM YYYY").format("dddd");
-            }
-        },
-    },
     data() {
         return {
-            dateString: moment().format("dddd DD MMM YYYY"),
+            dateString: moment().format("dddd, DD MMMM YYYY"),
         };
     },
 };
