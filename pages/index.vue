@@ -239,7 +239,7 @@ export default {
             // faccio sparire il v-text-field per l'edit e faccio riapparire lo span con il testo
             this.taskToEditIndex = null;
             // aggiorno localStorage
-            setLocalStorage();
+            this.setLocalStorage();
         },
         setLocalStorage() {
             // DESCRIZIONE:
@@ -293,7 +293,7 @@ export default {
             });
 
             // aggiorno localStorage
-            setLocalStorage();
+            this.setLocalStorage();
 
             // rimuovo il focus sul v-text-field di input per evitare che la virtual keyboard su mobile rimanga visualizzata
             this.$el.querySelector("#text-input").blur();
@@ -308,7 +308,7 @@ export default {
             this.tasks = [];
 
             // aggiorno localStorage
-            setLocalStorage();
+            this.setLocalStorage();
 
             // chiudo la finestra di dialogo
             this.deleteAllTasksDialog = false;
@@ -334,7 +334,7 @@ export default {
             this.tasks.splice(i, 1);
 
             // aggiorno localStorage
-            setLocalStorage();
+            this.setLocalStorage();
         },
         setFocusOnTextInput() {
             // DESCRIZIONE:
