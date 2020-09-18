@@ -398,8 +398,18 @@ export default {
     cursor: pointer;
     color: white;
     border-radius: 4px;
-    padding: 0px 4px;
+    padding: 3px 6px;
     font-size: 16px;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+        0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+    transition-duration: 0.28s;
+    transition-property: box-shadow, transform, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.8;
+}
+::v-deep .v-slider__tick-label:hover {
+    opacity: 0.7;
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.6, 1);
 }
 
 // formattazione checkbox - ridotto margine tra quadratino e testo
