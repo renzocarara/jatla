@@ -16,11 +16,12 @@
                     <div class="date-border d-flex flex-column align-center blue-grey--text rounded">
                         <h3 class="font-weight-medium lh">{{ dateString | day }}</h3>
                         <h5 class="font-weight-medium lh">{{ dateString | weekday }}</h5>
+                        <!-- {{ dateString }} -->
                     </div>
                 </div>
         </v-card-title>
 
-        <v-card-subtitle class="pt-3 pb-0 mb-2 text-h6 text-center blue-grey--text">
+        <v-card-subtitle v-if="$nuxt.$route.path=='/about'" class="pt-3 pb-0 mb-2 text-h6 text-center blue-grey--text">
             <span class="subtitle-color ">J</span>ust 
             <span class="subtitle-color">A</span>nother 
             <span class="subtitle-color">T</span>odos 
@@ -36,18 +37,20 @@ export default {
     filters: {
         day: function (value) {
             if (value) {
-                return moment(String(value)).format("D MMM");
+                return moment(String(value), "dddd DD MMM YYYY").format(
+                    "D MMM"
+                );
             }
         },
         weekday: function (value) {
             if (value) {
-                return moment(String(value)).format("dddd");
+                return moment(String(value), "dddd DD MMM YYYY").format("dddd");
             }
         },
     },
     data() {
         return {
-            dateString: moment(),
+            dateString: moment().format("dddd DD MMM YYYY"),
         };
     },
 };

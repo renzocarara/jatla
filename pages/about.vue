@@ -1,7 +1,7 @@
 <template>
     <v-layout>
         <v-flex>
-            <v-card class="mx-auto" width="400" color="teal lighten-4">
+            <v-card class="mx-auto view-port" width="400" color="teal lighten-4">
 
                 <card-header />
 
@@ -22,9 +22,15 @@
                     </p>
                     <h4>HOW IT WORKS</h4>
                     <p>
-                        Allow to create a classic Todo List.<br/> Data is saved in a persistent way through the browser's LocalStorage.
+                        Allow to create a classic Todo List.<br/>
+                        Data is saved in a persistent way through the browser's LocalStorage.
                         If LocalStorage is not available in your browser, a warning message is displayed.<br/>
-                        You can add, modify and delete tasks. You can toggle task status between "Pending" and "Done" through the related checkbox.
+                        You can:
+                        <ul>
+                            <li>Add, modify and delete tasks.</li>
+                            <li>Toggle task's status between "Pending" and "Done"</li>
+                            <li>Filter tasks based on status.</li>
+                        </ul>
                     </p>
                     
                     

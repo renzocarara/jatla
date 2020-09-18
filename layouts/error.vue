@@ -1,7 +1,7 @@
 <template>
     <v-layout>
         <v-flex>
-            <v-card class="mx-auto" width="400" color="teal lighten-4">
+            <v-card class="mx-auto view-port" width="400" color="teal lighten-4">
 
                 <card-header />
 
@@ -70,4 +70,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+//
 </style>

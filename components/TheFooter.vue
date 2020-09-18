@@ -1,5 +1,5 @@
 <template>
-    <v-footer absolute color="teal lighten-3" app>
+    <v-footer fixed color="teal lighten-3" app>
         <span>
             <a
                 class="blue-grey--text text-decoration-none"

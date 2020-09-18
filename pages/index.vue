@@ -1,6 +1,6 @@
 <template>
     <v-layout>
-        <v-card class="mx-auto" width="400" color="teal lighten-4">
+        <v-card class="mx-auto view-port" width="400" color="teal lighten-4">
 
             <card-header />
            
@@ -8,59 +8,60 @@
 
                 <text-input @emitTask="saveTask" />
 
+                <!-- <v-divider class="mb-4"></v-divider> -->
+
                 <div v-if="listNotEmpty">
 
-                    <h2>All:&nbsp;<span>{{ tasks.length }}</span></h2>
+                    <!-- <v-progress-circular :value="progress" color="success" rotate="-90" class="mr-4">
+                        {{ progress }}
+                    </v-progress-circular> -->
 
-                    <v-divider class="mt-4"></v-divider>
+                    <!-- slider per selezionare quali task visualizzare: "all", "done" o "pending" -->
+                    <v-slider class="mt-5 mb-3"
+                        v-model="sliderSelection"
+                        :tick-labels="ticksLabels"
+                        :max="2"
+                        step="1"
+                        color="teal"
+                        track-color="teal"
+                        ticks="always"
+                        tick-size="0"
+                        thumb-label="always"
+                        thumb-color="teal lighten-2"
+                        @click="sliderClicked"
+                    >
+                        <!-- uso v-slot per settare il valore di thumb-label -->
+                        <template v-slot:thumb-label>
+                            <strong class="fz18">{{taskNumbers[sliderSelection]}}</strong>
+                        </template>
+                    </v-slider>
 
-                    <v-row class="my-1" align="center">
-                        <strong class="mx-4 text--darken-2">
-                           Pending: {{pendingTasks }}
-                        </strong>
-
-                        <v-divider vertical></v-divider>
-
-                        <strong class="mx-4 text--darken-2">
-                            Done: {{ doneTasks }}
-                        </strong>
-
-                        <v-spacer></v-spacer>
-
-                        <v-progress-circular :value="progress" color="success" rotate="-90" class="mr-4">
-                            {{ progress }}
-                        </v-progress-circular>
-                    </v-row>
-
-                    <v-divider class="mb-4"></v-divider>
 
                     <v-card >
                         <div v-for="(task, i) in tasks">
                             <v-divider
-                            v-if="i !== 0"
+                            v-if="i !== 0  && taskSubset.includes(task.done.toString())"
                             :key="`${i}-divider`"
                             ></v-divider>
 
-                            <v-list-item :key="`${i}-task`" class="px-2">
-                                <v-icon class="mr-2" @click="deleteTask(i)">mdi-trash-can-outline</v-icon>
+                            <v-list-item :key="`${i}-task`" class="px-2" v-if="taskSubset.includes(task.done.toString())">
                                 <v-list-item-action>
                                     <!-- quadratino della checkbox -->
                                     <v-checkbox
                                     v-model="task.done"
-                                    :color="task.done ? 'grey' : ''"
-                                    >
+                                    :color="task.done ? 'green' : ''">
                                     </v-checkbox>
                                 </v-list-item-action>
 
-                                <!-- testo accanto al quadratino della checkbox -->
+                                <!-- nome del task, è il testo accanto al quadratino della checkbox -->
                                 <span v-if="taskToEditIndex==null || i!=taskToEditIndex"
-                                    class="ml-3 task-text"
-                                    :class="task.done ? 'grey--text' : 'teal--text'"
+                                    class="task-text"
+                                    :class="task.done ? 'text-done' : 'text-pending'"
                                     @click="editTask(i)">
                                     <strong>{{ task.text }}</strong>
                                 </span>
-
-                                <!-- text-field per editare il task -->
+                                
+                                <!-- text-field per editare il nome del task -->
                                 <v-text-field v-else
                                     class="pl-3 fz18"
                                     ref="textEdit"
@@ -72,17 +73,7 @@
                                 </v-text-field>
 
                                 <v-spacer></v-spacer>
-
-                                <!-- baffo che indica task completato -->
-                                <v-scroll-x-transition>
-                                    <v-icon
-                                    large
-                                    v-if="task.done"
-                                    color="success"
-                                    >
-                                    mdi-check
-                                    </v-icon>
-                                </v-scroll-x-transition>
+                                <v-icon class="ml-1" @click="deleteTask(i)">mdi-trash-can-outline</v-icon>
 
                             </v-list-item>
                         </div>
@@ -171,12 +162,18 @@ export default {
 
             // abilita finestra di avviso per chiedere conferma della cancellazione di tutti i task
             deleteAllTasksDialog: false,
+            // props da passare alla finestra di dialogo
             dialogTitleLabel: "Warning",
             dialogTitleText: "Clear ALL",
             dialogMessage:
                 "You're are gonna delete all the Tasks in your List! Do you really want to proceed?",
             dialogConfirmBtn: "DELETE",
             dialogCancelBtn: "CANCEL",
+
+            // slider per filtrare i task
+            sliderSelection: 1, // All
+            taskSubset: ["true", "false"],
+            ticksLabels: ["Pending", "All", "Done"],
         };
     },
     head() {
@@ -198,19 +195,22 @@ export default {
             // indica se c'è almeno 1 task nella lista dei Todos
             return this.tasks.length > 0;
         },
-        doneTasks() {
+
+        taskNumbers() {
             // calcolo quanti task risultano completati
-            // la filter mi restituisce un array con solo i task che hanno la proprità "done"=true
-            // la length mi conta gli elementi di questo array creat dalla filter
-            return this.tasks.filter((task) => task.done).length;
+            // NOTA: la filter mi restituisce un array con solo i task che hanno la proprità "done"=true
+            // la length mi conta gli elementi di questo array creato dalla filter
+            let done = this.tasks.filter((task) => task.done).length;
+
+            // calcolo quanti task risultano da completare
+            let pending = this.tasks.length - done;
+
+            // ritorno un array con 3 info [pending, all, done]
+            return [pending, pending + done, done];
         },
         progress() {
             // calcolo la percentuale di task completati (solo valore intero, no decimali)
-            return ((this.doneTasks / this.tasks.length) * 100).toFixed(0);
-        },
-        pendingTasks() {
-            // calcolo quanti task risultano da completare
-            return this.tasks.length - this.doneTasks;
+            return ((this.taskNumbers[2] / this.tasks.length) * 100).toFixed(0);
         },
     },
 
@@ -335,6 +335,19 @@ export default {
                 this.$el.querySelector("#text-input").focus();
             });
         },
+        sliderClicked() {
+            // DESCRIZIONE:
+            // traduce la selezione dell'utente (fatta tramite slider) in un array che viene poi utilizzato
+            // nel ciclo v-for di renderizzazione dei task, per creare a lista task
+
+            if (this.sliderSelection == 0) {
+                this.taskSubset = ["false"]; // Pending
+            } else if (this.sliderSelection == 1) {
+                this.taskSubset = ["true", "false"]; // All
+            } else {
+                this.taskSubset = ["true"]; // Done
+            }
+        },
     },
 };
 </script>
@@ -355,5 +368,38 @@ export default {
 ::v-deep .v-list-item .v-input__append-inner {
     padding-left: 10px;
     margin-bottom: 5px;
+}
+
+// formattazione slider
+::v-deep .v-slider__tick-label {
+    cursor: pointer;
+    color: white;
+    border-radius: 4px;
+    padding: 0px 4px;
+    font-size: 16px;
+}
+
+// formattazione checkbox - ridotto margine tra quadratino e testo
+.v-application--is-ltr .v-list-item__action:first-child {
+    margin-right: 12px;
+}
+
+::v-deep .v-slider__tick:nth-child(3) .v-slider__tick-label {
+    background-color: green;
+}
+::v-deep .v-slider__tick:nth-child(1) .v-slider__tick-label {
+    background-color: orange;
+}
+::v-deep .v-slider__tick:nth-child(2) .v-slider__tick-label {
+    background-color: gray;
+}
+.text-pending {
+    color: orange;
+    font-weight: bold;
+}
+.text-done {
+    color: green;
+    font-style: italic;
+    opacity: 50%;
 }
 </style>
