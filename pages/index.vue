@@ -134,19 +134,14 @@ export default {
     mounted() {
         // mi metto in ascolto  dell'evento chiusura tab/window del browser e quando lo intercetto
         // aggiorno Local Storage (se supportato)
+        // ATTENZIONE SEMBRA NON FUNZIORE SU CHROME ANDROID
         // window.addEventListener("beforeunload", this.setLocalStorage);
-        window.onunload = window.onbeforeunload = this.setLocalStorage;
 
         // recupero la lista task ("jatlaTasks"), se presente nel localStorage
         this.getLocalStorage();
 
         // // setto il focus sul v-text-field di input
         // this.$refs.textInput.focus();
-    },
-    beforeDestroy() {
-        // aggiorno Local Storage (se supportato) quando la pagina viene lasciata
-        // in modo che al reload della pagina vengano trovati e ricaricati i dati dal localStorage
-        this.setLocalStorage();
     },
     data() {
         return {
@@ -243,6 +238,8 @@ export default {
 
             // faccio sparire il v-text-field per l'edit e faccio riapparire lo span con il testo
             this.taskToEditIndex = null;
+            // aggiorno localStorage
+            setLocalStorage();
         },
         setLocalStorage() {
             // DESCRIZIONE:
@@ -295,7 +292,10 @@ export default {
                 text: emittedTask,
             });
 
-            // rimuovo il focus sul v-text-field di input
+            // aggiorno localStorage
+            setLocalStorage();
+
+            // rimuovo il focus sul v-text-field di input per evitare che la virtual keyboard su mobile rimanga visualizzata
             this.$el.querySelector("#text-input").blur();
         },
 
@@ -306,6 +306,10 @@ export default {
 
             // svuoto l'array dei task
             this.tasks = [];
+
+            // aggiorno localStorage
+            setLocalStorage();
+
             // chiudo la finestra di dialogo
             this.deleteAllTasksDialog = false;
 
@@ -328,6 +332,9 @@ export default {
 
             // rimuovo il singolo task
             this.tasks.splice(i, 1);
+
+            // aggiorno localStorage
+            setLocalStorage();
         },
         setFocusOnTextInput() {
             // DESCRIZIONE:
