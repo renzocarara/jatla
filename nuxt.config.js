@@ -33,7 +33,7 @@ export default {
       },
       {
         property: "og:image",
-        content: "https://morgana.netlify.app/jatla_snapshot.png"
+        content: "https://jatla.netlify.app/jatla_snapshot.png"
       },
 
       { property: "og:url", content: "https://jatla.netlify.app/" }
