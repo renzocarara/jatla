@@ -278,7 +278,15 @@ export default {
                     console.log("jatlatasks esiste");
                     this.tasks = JSON.parse(localStorage.getItem("jatlaTasks"));
                 } else {
-                    console.log("jatlatask non esiste!");
+                    console.log(
+                        "jatlatask non esiste! lo creo con task fittizi"
+                    );
+                    // creo un array di esempio con dei task fittizi
+                    this.tasks = [
+                        { done: false, text: "example task to be deleted" },
+                        { done: true, text: "another stub task" },
+                        { done: false, text: "third dummy task" },
+                    ];
                 }
             } else {
                 //dialog che avvisa LocalStorage not available!
