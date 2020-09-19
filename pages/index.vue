@@ -48,6 +48,8 @@
                                 <v-list-item-action>
                                     <!-- quadratino della checkbox -->
                                     <v-checkbox
+                                    on-icon="mdi-check-circle"
+                                    off-icon="mdi-checkbox-blank-circle-outline"
                                     v-model="task.done"
                                     :color="task.done ? 'green' : ''"
                                     @click="updateTaskStatus(i, task.done)">
@@ -69,12 +71,15 @@
                                     dense
                                     v-model="task.text"
                                     color="teal" background-color="teal lighten-5"
-                                    append-icon="mdi-content-save"
-                                    @click:append="updateTask" @keydown.enter="updateTask" @blur="updateTask">
+                                    @keydown.enter="updateTask" @blur="updateTask"
+                                >
+                                        <template v-slot:prepend-inner>
+                                            <v-icon @click="updateTask" large>mdi-content-save</v-icon>
+                                        </template>
                                 </v-text-field>
 
                                 <v-spacer></v-spacer>
-                                <v-icon class="ml-1" @click="deleteTask(i)">mdi-trash-can-outline</v-icon>
+                                <v-icon large class="ml-1" @click="deleteTask(i)">mdi-trash-can-outline</v-icon>
 
                             </v-list-item>
                         </div>
@@ -237,6 +242,8 @@ export default {
             // viene chiamata in tre casi mentre l'utente è in fase di edit:
             // l'utente preme ENTER, clicca sull'icona floppy o sposta il focus
 
+            console.log("updateTask() called!");
+
             // faccio sparire il v-text-field per l'edit e faccio riapparire lo span con il testo
             this.taskToEditIndex = null;
             // aggiorno localStorage
@@ -384,16 +391,16 @@ export default {
     font-size: 18px;
 }
 
-// formattazione riquadrino che contiene la data
+// text-field per edit del task
 ::v-deep .v-list-item .v-text-field .v-input__control {
     height: 30px;
 }
-::v-deep .v-list-item .v-input__append-inner {
-    padding-left: 10px;
-    margin-bottom: 5px;
-}
+// ::v-deep .v-list-item .v-input__append-inner {
+//     padding-left: 10px;
+//     margin-bottom: 5px;
+// }
 
-// formattazione slider
+// bottoncini sotto lo slider
 ::v-deep .v-slider__tick-label {
     cursor: pointer;
     color: white;
@@ -407,16 +414,6 @@ export default {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     opacity: 0.8;
 }
-::v-deep .v-slider__tick-label:hover {
-    opacity: 0.7;
-    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.6, 1);
-}
-
-// formattazione checkbox - ridotto margine tra quadratino e testo
-.v-application--is-ltr .v-list-item__action:first-child {
-    margin-right: 12px;
-}
-
 ::v-deep .v-slider__tick:nth-child(3) .v-slider__tick-label {
     background-color: green;
 }
@@ -426,6 +423,17 @@ export default {
 ::v-deep .v-slider__tick:nth-child(2) .v-slider__tick-label {
     background-color: gray;
 }
+::v-deep .v-slider__tick-label:hover {
+    opacity: 0.7;
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+// checkbox - ridotto margine tra quadratino e testo
+.v-application--is-ltr .v-list-item__action:first-child {
+    margin-right: 12px;
+}
+
+// testo dei task
 .text-pending {
     color: orange;
     font-weight: bold;
@@ -435,4 +443,16 @@ export default {
     font-style: italic;
     opacity: 0.5;
 }
-</style>
+
+// icona checkbox
+::v-deep i.v-icon.mdi-check-circle,
+::v-deep i.v-icon.mdi-checkbox-blank-circle-outline {
+    font-size: 36px;
+    color: orange;
+}
+
+// tolgo dal primo piano la box (non utilizzata) per i messaggi dello slider
+::v-deep .v-input__slot .v-messages {
+    z-index: -1;
+}
+</style>{
