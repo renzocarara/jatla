@@ -1,7 +1,8 @@
 <template>
     <v-layout>
         <v-flex>
-            <v-card class="mx-auto view-port" width="400" color="teal lighten-4">
+            <v-card class="mx-auto 
+            layout: 'blog'," width="400" color="teal lighten-4">
 
                 <card-header />
 
@@ -35,6 +36,7 @@
 import CardHeader from "~/components/CardHeader.vue";
 
 export default {
+    layout: "errorlayout",
     components: {
         CardHeader,
     },

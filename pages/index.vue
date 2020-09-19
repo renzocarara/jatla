@@ -449,6 +449,11 @@ export default {
     font-size: 36px;
     color: orange;
 }
+::v-deep .v-icon.mdi-trash-can-outline:hover {
+    color: red;
+    transform: scale(1.33);
+    transition: 0.3s ease-in-out;
+}
 
 // tolgo dal primo piano la box (non utilizzata) per i messaggi dello slider
 ::v-deep .v-input__control .v-messages {

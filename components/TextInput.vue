@@ -29,6 +29,7 @@ export default {
             // DESCRIZIONE:
             // verifica la validità dell'input, se il dato è un input valido viene passato al
             // componente chiamante generando un evento con $emit
+
             if (this.task !== null) {
                 // rimuovo dall'input eventuali leading and trailing blanks
                 let trimmedInput = this.task.trim();
