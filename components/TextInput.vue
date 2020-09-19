@@ -1,12 +1,16 @@
 <template>
+            <!-- append-icon="mdi-playlist-plus" -->
+            <!-- @click:append="checkInput" -->
        <v-text-field
             class="fz18"
             id="text-input"
             v-model="task"
             placeholder="Add a new todo here..."
             solo color="teal" background-color="teal lighten-5"
-            append-icon="mdi-playlist-plus"
-            @click:append="checkInput" @keydown.enter="checkInput">
+             @keydown.enter="checkInput">
+                <template v-slot:append>
+                    <v-icon large @click="checkInput">mdi-playlist-plus</v-icon>
+                </template>
         </v-text-field>
 </template>
 

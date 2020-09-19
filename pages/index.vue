@@ -46,7 +46,6 @@
 
                             <v-list-item :key="`${i}-task`" class="px-2" v-if="taskSubset.includes(task.done.toString())">
                                 <v-list-item-action>
-                                    <!-- quadratino della checkbox -->
                                     <v-checkbox
                                     on-icon="mdi-check-circle"
                                     off-icon="mdi-checkbox-blank-circle-outline"
@@ -56,7 +55,7 @@
                                     </v-checkbox>
                                 </v-list-item-action>
 
-                                <!-- nome del task, è il testo accanto al quadratino della checkbox -->
+                                <!-- nome del task, è il testo accanto alla checkbox -->
                                 <span v-if="taskToEditIndex==null || i!=taskToEditIndex"
                                     class="task-text"
                                     :class="task.done ? 'text-done' : 'text-pending'"
@@ -405,7 +404,7 @@ export default {
     cursor: pointer;
     color: white;
     border-radius: 4px;
-    padding: 3px 6px;
+    padding: 6px 10px;
     font-size: 16px;
     box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
         0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
@@ -428,7 +427,7 @@ export default {
     transition: opacity 0.2s cubic-bezier(0.4, 0, 0.6, 1);
 }
 
-// checkbox - ridotto margine tra quadratino e testo
+// checkbox - ridotto margine tra checkbox e testo
 .v-application--is-ltr .v-list-item__action:first-child {
     margin-right: 12px;
 }
@@ -452,7 +451,7 @@ export default {
 }
 
 // tolgo dal primo piano la box (non utilizzata) per i messaggi dello slider
-::v-deep .v-input__slot .v-messages {
+::v-deep .v-input__control .v-messages {
     z-index: -1;
 }
 </style>{
